@@ -11,8 +11,11 @@ Coming Soon
 Coming Soon
 
 ## Teams
-- Project Leader : [Maskal](https://github.com/azizcode)
-- Project Leader 2 : [Agus Cahyono](https://github.com/balitax)
+- Project Leader : [Maskal (H. Abdul Aziz)](https://github.com/azizcode)
+- Co-Project Leader : [Agus Cahyono](https://github.com/balitax)
+
+## Contributors
+- [Harditya Ramadhan](https://github.com/freeskys)
 
 ###License
 MIT License
