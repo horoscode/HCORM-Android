@@ -1,84 +1,62 @@
 package com.horoscode.hcorm.helper;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+import com.horoscode.hcorm.HCDatabase;
+
+import java.io.File;
+
 /**
  * Created by Mac on 9/6/14.
  */
-public class DatabaseHelper {
-//    private final static  String dbName				=	"akimi.db";
-//    private String tableName, id, dbPath;
-//    private final static int dbVersion				=	1;
-//    private ArrayList<String[]> tableColumns		=	new ArrayList<String[]>();
-//
-//    public String getTableName() {
-//        return tableName;
-//    }
-//
-//    public void setTableName(String tableName) {
-//        this.tableName = tableName;
-//    }
-//
-//    public ArrayList<String[]> getTableColumns() {
-//        return tableColumns;
-//    }
-//
-//    public void setTableColumns(ArrayList<String[]> tableColumns) {
-//        this.tableColumns = tableColumns;
-//    }
-//
-//    SQLiteDatabase db;
-//    Context context;
-//
-//    public baseModel(Context context, String tableName, ArrayList<String[]> tableColumns){
-//        super(context, dbName, null, dbVersion);
-//        this.tableName								=	tableName;
-//        this.tableColumns							=	tableColumns;
-//        this.context								=	context;
-//        dbPath										=	context.getExternalFilesDir("assets").getAbsolutePath()+"/"+dbName;
-//        createDb();
-//    }
-//
-//    private void createDb() {
-//        boolean dbExist 							=	checkDb();
-//        if(!dbExist){
-//            getReadableDatabase();
-//            putDb();
-//        }
-//    }
-//
-//    private boolean checkDb(){
-//        File dbFile 								=	new File(dbPath);
-//        return dbFile.exists();
-//
-//    }
-//
-//    private void putDb(){
-//        try{
-//            InputStream myInput						=	context.getAssets().open(dbName);
-//            String outFileName 						=	dbPath ;
-//
-//            OutputStream myOutput 					=	new FileOutputStream(outFileName);
-//            byte[] buffer 							=	new byte[1024];
-//            int length;
-//            while ((length = myInput.read(buffer))>0){
-//                myOutput.write(buffer, 0, length);
-//            }
-//            myOutput.flush();
-//            myOutput.close();
-//            myInput.close();
-//        }
-//        catch(Exception e){
-//
-//        }
-//    }
-//
-//    public String getId() {
-//        return id;
-//    }
-//
-//    public void setId(String id) {
-//        this.id = id;
-//    }
-//
+public class DatabaseHelper extends SQLiteOpenHelper{
+    Context context;
+
+    SQLiteDatabase db;
+
+    public DatabaseHelper(Context context){
+        super(context, HCDatabase.getDatabaseName(), null, HCDatabase.getDatabaseVersion());
+        this.context								=	context;
+        dbPath										=	context.getExternalFilesDir("assets").getAbsolutePath()+"/"+ HCDatabase.getDatabaseName() + HCDatabase.getDatabaseExtension();
+        createDb();
+    }
+
+    private void createDb() {
+        boolean dbExist 							=	checkDb();
+        if(!dbExist){
+            getReadableDatabase();
+            putDb();
+        }
+    }
+
+    private boolean checkDb(){
+        File dbFile 								=	new File(dbPath);
+        return dbFile.exists();
+
+    }
+
+    private void putDb(){
+        try{
+            InputStream myInput						=	context.getAssets().open(dbName);
+            String outFileName 						=	dbPath ;
+
+            OutputStream myOutput 					=	new FileOutputStream(outFileName);
+            byte[] buffer 							=	new byte[1024];
+            int length;
+            while ((length = myInput.read(buffer))>0){
+                myOutput.write(buffer, 0, length);
+            }
+            myOutput.flush();
+            myOutput.close();
+            myInput.close();
+        }
+        catch(Exception e){
+
+        }
+    }
+
 //    public long save(String[] input){
 //        db 											=	SQLiteDatabase.openDatabase(dbPath, null, SQLiteDatabase.OPEN_READWRITE);
 //        ContentValues values						=	new ContentValues();
@@ -199,16 +177,16 @@ public class DatabaseHelper {
 //        }
 //        return data;
 //    }
-//
+
 //    public void delete() {
 //        SQLiteDatabase db 							=	SQLiteDatabase.openDatabase(dbPath, null, SQLiteDatabase.OPEN_READWRITE);
 //        db.delete(tableName, " id = ?",  new String[]{getId()}); //selections args
 //        db.close();
 //    }
-//
-//    @Override
-//    public void onCreate(SQLiteDatabase arg0) { }
-//
-//    @Override
-//    public void onUpgrade(SQLiteDatabase arg0, int arg1, int arg2) { }
+
+    @Override
+    public void onCreate(SQLiteDatabase arg0) { }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase arg0, int arg1, int arg2) { }
 }
