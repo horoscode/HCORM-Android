@@ -10,10 +10,10 @@ public class HCORM{
     }
 
     public static void initWithDatabaseNameAndDatabaseExtension(String databaseName, String databaseExtension){
-        initWithDatabaseNameAndDatabaseExtensionAndDatabaseVersion(databaseName, databaseExtension, "1");
+        initWithDatabaseNameAndDatabaseExtensionAndDatabaseVersion(databaseName, databaseExtension, 1);
     }
 
-    public static void initWithDatabaseNameAndDatabaseVersion(String databaseName, String databaseVersion){
+    public static void initWithDatabaseNameAndDatabaseVersion(String databaseName, int databaseVersion){
         initWithDatabaseNameAndDatabaseVersionAndDatabasePath(databaseName, databaseVersion, "data");
     }
 
@@ -21,19 +21,19 @@ public class HCORM{
         initWithDatabaseNameAndDatabaseExtensionAndDatabasePath(databaseName, "db", databasePath);
     }
 
-    public static void initWithDatabaseNameAndDatabaseExtensionAndDatabaseVersion(String databaseName, String databaseExtension, String databaseVersion){
+    public static void initWithDatabaseNameAndDatabaseExtensionAndDatabaseVersion(String databaseName, String databaseExtension, int databaseVersion){
         initWithDatabaseNameAndDatabaseExtensionAndDatabaseVersionAndDatabasePath(databaseName, databaseExtension, databaseVersion, "data");
     }
 
     public static void initWithDatabaseNameAndDatabaseExtensionAndDatabasePath(String databaseName, String databaseExtension, String databasePath){
-        initWithDatabaseNameAndDatabaseExtensionAndDatabaseVersionAndDatabasePath(databaseName, databaseExtension, "1", databasePath);
+        initWithDatabaseNameAndDatabaseExtensionAndDatabaseVersionAndDatabasePath(databaseName, databaseExtension, 1, databasePath);
     }
 
-    public static void initWithDatabaseNameAndDatabaseVersionAndDatabasePath(String databaseName, String databaseVersion, String databasePath){
+    public static void initWithDatabaseNameAndDatabaseVersionAndDatabasePath(String databaseName, int databaseVersion, String databasePath){
         initWithDatabaseNameAndDatabaseExtensionAndDatabaseVersionAndDatabasePath(databaseName, "db", databaseVersion, databasePath);
     }
 
-    public static void initWithDatabaseNameAndDatabaseExtensionAndDatabaseVersionAndDatabasePath(String databaseName, String databaseExtension,String databaseVersion,String databasePath){
+    public static void initWithDatabaseNameAndDatabaseExtensionAndDatabaseVersionAndDatabasePath(String databaseName, String databaseExtension,int databaseVersion,String databasePath){
         HCDatabase.setDatabaseInfo(databaseName, databaseExtension, databaseVersion, databasePath);
     }
 }

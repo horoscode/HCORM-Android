@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.horoscode.hcorm.helper.DatabaseHelper;
 import com.horoscode.hcorm.model.*;
 
 
@@ -15,6 +16,10 @@ public class cmain extends Activity {
         setContentView(R.layout.activity_cmain);
         mmain mmain = new mmain();
         HCORM.initWithDatabaseName("supersurvey");
-        Toast.makeText(this, mmain.all(), Toast.LENGTH_SHORT).show();
+        DatabaseHelper db = new DatabaseHelper();
+        mmain.username = "maskal";
+        mmain.password = "saintek";
+        mmain.tableId = 3;
+        mmain.save();
     }
 }

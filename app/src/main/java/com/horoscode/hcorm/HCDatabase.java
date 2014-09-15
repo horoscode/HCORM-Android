@@ -3,17 +3,29 @@ package com.horoscode.hcorm;
 import android.app.Application;
 import android.content.Context;
 
+import com.horoscode.hcorm.helper.DatabaseHelper;
+
 /**
  * Created by Mac on 9/6/14.
  */
 public class HCDatabase extends Application{
 
     private static String databaseName = "";
-    private static String databaseVersion = "";
+    private static int databaseVersion;
     private static String databasePath = "";
     private static String databaseExtension = "";
+    private static Context context;
 
-    public static void setDatabaseInfo(String databaseName, String databaseExtension,String databaseVersion,String databasePath){
+    public static Context getContext() {
+        return context;
+    }
+
+    public void onCreate(){
+        super.onCreate();
+        HCDatabase.this.context = getApplicationContext();
+    }
+
+    public static void setDatabaseInfo(String databaseName, String databaseExtension,int databaseVersion,String databasePath){
         HCDatabase.databaseName = databaseName;
         HCDatabase.databaseExtension = databaseExtension;
         HCDatabase.databaseVersion = databaseVersion;
@@ -24,12 +36,12 @@ public class HCDatabase extends Application{
         return databaseName;
     }
 
-    public static String getDatabaseVersion() {
+    public static int getDatabaseVersion() {
         return databaseVersion;
     }
 
     public static String getDatabasePath() {
-        return databasePath;
+        return context.getExternalFilesDir("assets").getAbsolutePath()+"/"+ databaseName + "." + databaseExtension;
     }
 
     public static String getDatabaseExtension() {
