@@ -3,6 +3,7 @@ package com.horoscode.hcorm;
 import android.app.Application;
 import android.content.Context;
 
+import com.horoscode.hcorm.helper.CacheHelper;
 import com.horoscode.hcorm.helper.DatabaseHelper;
 
 /**
@@ -15,6 +16,7 @@ public class HCDatabase extends Application{
     private static String databasePath = "";
     private static String databaseExtension = "";
     private static Context context;
+    private static CacheHelper cacheHelper;
 
     public static Context getContext() {
         return context;
@@ -23,6 +25,7 @@ public class HCDatabase extends Application{
     public void onCreate(){
         super.onCreate();
         HCDatabase.this.context = getApplicationContext();
+        HCDatabase.this.cacheHelper = new CacheHelper();
     }
 
     public static void setDatabaseInfo(String databaseName, String databaseExtension,int databaseVersion,String databasePath){
@@ -46,5 +49,13 @@ public class HCDatabase extends Application{
 
     public static String getDatabaseExtension() {
         return databaseExtension;
+    }
+
+    public static void setCache(HCModel model){
+        cacheHelper.setModelcache(model);
+    }
+
+    public static HCModel getModelCache(){
+        return cacheHelper.getModelcache();
     }
 }

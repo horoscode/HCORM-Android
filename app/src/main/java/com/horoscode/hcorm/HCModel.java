@@ -39,10 +39,15 @@ public class HCModel {
     }
 
     protected void save(){
-        DatabaseHelper.save(this, tableId, tableName);
+        HCDatabase.setCache(this);
+        DatabaseHelper.save();
     }
 
+    public String getTableName(){ return tableName; }
+
+    public int getTableId(){ return tableId; }
+
     protected void destroy(){
-        DatabaseHelper.destroy(this, tableId, tableName);
+        DatabaseHelper.destroy();
     }
 }

@@ -16,10 +16,9 @@ public class cmain extends Activity {
         setContentView(R.layout.activity_cmain);
         mmain mmain = new mmain();
         HCORM.initWithDatabaseName("supersurvey");
-        DatabaseHelper db = new DatabaseHelper();
+//        DatabaseHelper db = new DatabaseHelper();
         mmain.username = "maskal";
         mmain.password = "saintek";
-        mmain.tableId = 3;
         mmain.save();
     }
 }
