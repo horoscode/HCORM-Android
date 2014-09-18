@@ -15,7 +15,7 @@ Coming Soon
 - Co-Project Leader : -
 
 ## Contributors
-- Coming Soon
+- [Harditya Ramadhan](https://github.com/freeskys)
 
 ###License
 MIT License
