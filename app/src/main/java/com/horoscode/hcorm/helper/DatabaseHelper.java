@@ -34,7 +34,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     private void createDatabase() {
         if(!fileHelper.exists()){
-            getReadableDatabase();
+//            getReadableDatabase();
             writeDatabase();
         }
     }
