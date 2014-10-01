@@ -13,10 +13,15 @@ public class ReflectionHelper {
     }
 
     public static String getFieldValue(Field field){
-        String value                        =   null;
+        return getFieldValue(field.getName().toString());
+    }
+
+    public static String getFieldValue(String fieldName){
+        String value                            =   null;
         try {
+            Field field                         =   null;
             try {
-                field                       =   HCDatabase.getModelCache().getClass().getDeclaredField(field.getName().toString());
+                field                           =   HCDatabase.getModelCache().getClass().getDeclaredField(fieldName);
                 field.setAccessible(true);
             } catch (NoSuchFieldException e) {
                 e.printStackTrace();
@@ -26,5 +31,29 @@ public class ReflectionHelper {
             e.printStackTrace();
         }
         return value;
+    }
+
+    public static void setFieldValue(String fieldName, Object object){
+        String value                            =   null;
+        try {
+            Field field                         =   null;
+            try {
+                field                           =   HCDatabase.getModelCache().getClass().getDeclaredField(fieldName);
+                field.setAccessible(true);
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            }
+            field.set(HCDatabase.getModelCache(), object);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void setFieldValue(Field field, Object object){
+        try {
+            field.set(HCDatabase.getModelCache(), object);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 }

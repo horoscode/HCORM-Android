@@ -6,7 +6,7 @@ import com.horoscode.hcorm.HCModel;
  * Created by Mac on 9/17/14.
  */
 public class CacheHelper {
-    private static HCModel modelcache;
+    private HCModel modelcache;
 
     public HCModel getModelcache() {
         return modelcache;

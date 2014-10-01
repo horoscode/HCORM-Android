@@ -9,9 +9,5 @@ public class mmain extends HCModel {
 
     public String username;
     public String password;
-
-    public mmain(){
-        tableName = "user";
-    }
-
+    public String tableName     =   "user";
 }
