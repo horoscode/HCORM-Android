@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import com.horoscode.hcorm.model.*;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,19 +27,20 @@ public class cmain extends Activity {
 //        mmain.username = "maskal";
 //        mmain.password = "saintek";
 //        mmain.save();
-
-//        ArrayList<mmain> all = new mmain().all();
-//        StringBuilder builder = new StringBuilder();
-//        for(int i=0; i<all.size(); i++){
-//            builder.append("\n");
-//            builder.append("username = " + all.get(i).username + " password ="+ all.get(i).password);
-//        }
-
-        mmain first = new mmain().first();
+//
+        ArrayList<mmain> all = new mmain().all();
+//
         StringBuilder builder = new StringBuilder();
-        builder.append("\n");
-        builder.append("username = " + first.username + " password ="+ first.password);
+        for(int i=0; i<all.size(); i++){
+            builder.append("username = " + all.get(i).tableId + " password ="+ all.get(i).password);
+            builder.append("\n");
+        }
 
+//        mmain first = new mmain().first();
+//        StringBuilder builder = new StringBuilder();
+
+//        builder.append("username = " + first.username + " password ="+ first.password);
+//
         TextView ok = (TextView) findViewById(R.id.ok);
         ok.setText(builder.toString());
     }

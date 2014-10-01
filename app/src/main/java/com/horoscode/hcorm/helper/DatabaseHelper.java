@@ -7,7 +7,6 @@ import android.util.Log;
 
 import com.horoscode.hcorm.HCDatabase;
 import com.horoscode.hcorm.HCModel;
-import com.horoscode.hcorm.model.mmain;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -60,33 +59,37 @@ public class DatabaseHelper{
         return success;
     }
 
-    public static <T extends HCModel> ArrayList<T> all(T model){
+    public static <T extends HCModel> ArrayList<T> all(){
         openDatabase(false);
         ArrayList<T> models                         =   new ArrayList<T>();
         String query 								=	"SELECT * FROM " + tableName;
         Cursor cursor								=	databaseAccessor.rawQuery(query, null);
         if (cursor.moveToFirst()) {
             do {
-                T modelElement                      =   (T) new mmain();
-                for(int i=0; i<cursor.getColumnCount(); i++){
-                    if(!cursor.getColumnName(i).equals("id")){
+                try {
+                    T model                         =   (T) modelCache.getClass().newInstance();
+                    for(int i=0; i<cursor.getColumnCount(); i++){
                         try {
-                            Field kolom             =   modelElement.getClass().getDeclaredField(cursor.getColumnName(i));
+                            Field kolom         =   model.getClass().getDeclaredField(cursor.getColumnName(i));
                             ReflectionHelper.setFieldValue(kolom,cursor.getString(i));
                         }catch(Exception e){}
                     }
+                    models.add(model);
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
                 }
-                models.add(modelElement);
             } while (cursor.moveToNext());
         }
         return models;
     }
 
-    public static <T extends HCModel> T first(T model){
+    public static <T extends HCModel> T first(){
         openDatabase(false);
         String query 								=	"SELECT * FROM " + tableName;
         Cursor cursor								=	databaseAccessor.rawQuery(query, null);
-        T models                                    =   (T) new mmain();
+        T models                                    =   (T) modelCache;
         if (cursor.moveToFirst()) {
             for(int i=0; i<cursor.getColumnCount(); i++){
                 if(!cursor.getColumnName(i).equals("id")){

@@ -1,8 +1,6 @@
 package com.horoscode.hcorm.helper;
 
 import com.horoscode.hcorm.HCDatabase;
-
-import java.io.File;
 import java.io.InputStream;
 
 /**
@@ -10,9 +8,9 @@ import java.io.InputStream;
  */
 public class AssetHelper {
     public static InputStream fileToInputSteam(String fileName){
-        InputStream inputFile = null;
+        InputStream inputFile       =   null;
         try {
-            inputFile = HCDatabase.getContext().getAssets().open(fileName);
+            inputFile               =   HCDatabase.getContext().getAssets().open(fileName);
         }catch (Exception e){
 
         }
