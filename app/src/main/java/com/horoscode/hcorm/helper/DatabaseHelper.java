@@ -3,7 +3,6 @@ package com.horoscode.hcorm.helper;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.horoscode.hcorm.HCDatabase;
 import com.horoscode.hcorm.HCModel;
@@ -14,65 +13,63 @@ import java.util.ArrayList;
 /**
  * Created by Mac on 9/6/14.
  */
-public class DatabaseHelper{
+public class DatabaseHelper {
 
-    private static String databaseName              =   HCDatabase.getDatabaseName()+"."+HCDatabase.getDatabaseExtension();
-    private static String databasePath              =   HCDatabase.getDatabasePath();
-    private static HCModel modelCache               =   HCDatabase.getModelCache();
-    private static Field[] fields                   =   modelCache.getClass().getFields();
+    private static String databaseName = HCDatabase.getDatabaseNameFile();
+    private static String databasePath = HCDatabase.getDatabasePath();
+    private static HCModel modelCache = HCDatabase.getModelCache();
+    private static Field[] fields = modelCache.getClass().getFields();
     private static String tableName;
-    private static int tableId;
+    private static int id;
     private static SQLiteDatabase databaseAccessor;
-    private static FileHelper fileHelper            =   new FileHelper(databasePath);
 
     public static void checkDatabase() {
-        if(!fileHelper.exists()){
+        if (!FileHelper.isFileExist(databasePath)) {
             writeDatabase();
         }
     }
 
-    private static void writeDatabase(){
+    private static void writeDatabase() {
         try {
             FileHelper.writeFile(databaseName, databasePath);
-        }catch(Exception e){
-
+        } catch (Exception e) {
         }
     }
 
-    public static long save(){
+    public static long save() {
         openDatabase(true);
-        ContentValues values						=	new ContentValues();
-        long success								=	-1;
-        for(int i=0; i<fields.length; i++){
-            if(!fields[i].getName().equals("id") && !fields[i].getName().equals("tableName")){
+        ContentValues values = new ContentValues();
+        long success = -1;
+        for (int i = 0; i < fields.length; i++) {
+            if (!fields[i].getName().equals("id") && !fields[i].getName().equals("tableName")) {
                 values.put(ReflectionHelper.getFieldName(fields[i]), ReflectionHelper.getFieldValue(fields[i]));
             }
         }
 
-        if(tableId==-1){
-            success									=	databaseAccessor.insert(tableName, null, values);
-        }else{
-            success									=	databaseAccessor.update(tableName, values, "id = ?", new String[]{String.valueOf(tableId)});
+        if (id == -1) {
+            success = databaseAccessor.insert(tableName, null, values);
+        } else {
+            success = databaseAccessor.update(tableName, values, "id = ?", new String[]{String.valueOf(id)});
         }
-
         closeDatabase();
         return success;
     }
 
-    public static <T extends HCModel> ArrayList<T> all(){
+    public static <T extends HCModel> ArrayList<T> all() {
         openDatabase(false);
-        ArrayList<T> models                         =   new ArrayList<T>();
-        String query 								=	"SELECT * FROM " + tableName;
-        Cursor cursor								=	databaseAccessor.rawQuery(query, null);
+        ArrayList<T> models = new ArrayList<T>();
+        String query = "SELECT * FROM " + tableName;
+        Cursor cursor = databaseAccessor.rawQuery(query, null);
         if (cursor.moveToFirst()) {
             do {
                 try {
-                    T model                         =   (T) modelCache.getClass().newInstance();
-                    for(int i=0; i<cursor.getColumnCount(); i++){
+                    T model = (T) modelCache.getClass().newInstance();
+                    for (int i = 0; i < cursor.getColumnCount(); i++) {
                         try {
-                            Field kolom         =   model.getClass().getDeclaredField(cursor.getColumnName(i));
-                            ReflectionHelper.setFieldValue(kolom,cursor.getString(i));
-                        }catch(Exception e){}
+                            Field column = model.getClass().getDeclaredField(cursor.getColumnName(i));
+                            ReflectionHelper.setFieldValue(column, cursor.getString(i));
+                        } catch (Exception e) {
+                        }
                     }
                     models.add(model);
                 } catch (InstantiationException e) {
@@ -85,18 +82,19 @@ public class DatabaseHelper{
         return models;
     }
 
-    public static <T extends HCModel> T first(){
+    public static <T extends HCModel> T first() {
         openDatabase(false);
-        String query 								=	"SELECT * FROM " + tableName;
-        Cursor cursor								=	databaseAccessor.rawQuery(query, null);
-        T models                                    =   (T) modelCache;
+        String query = "SELECT * FROM " + tableName;
+        Cursor cursor = databaseAccessor.rawQuery(query, null);
+        T models = (T) modelCache;
         if (cursor.moveToFirst()) {
-            for(int i=0; i<cursor.getColumnCount(); i++){
-                if(!cursor.getColumnName(i).equals("id")){
+            for (int i = 0; i < cursor.getColumnCount(); i++) {
+                if (!cursor.getColumnName(i).equals("id")) {
                     try {
-                        Field kolom             =   models.getClass().getDeclaredField(cursor.getColumnName(i));
-                        ReflectionHelper.setFieldValue(kolom,cursor.getString(i));
-                    }catch(Exception e){}
+                        Field kolom = models.getClass().getDeclaredField(cursor.getColumnName(i));
+                        ReflectionHelper.setFieldValue(kolom, cursor.getString(i));
+                    } catch (Exception e) {
+                    }
                 }
             }
         }
@@ -104,32 +102,32 @@ public class DatabaseHelper{
     }
 
     public static long destroy() {
-        long success								=	-1;
-        int tableId                                 =   HCDatabase.getModelCache().getTableId();
-        if(tableId!=-1){
+        long success = -1;
+        int id = HCDatabase.getModelCache().getId();
+        if (id != -1) {
             openDatabase(true);
-            databaseAccessor.delete(tableName, " id = ?",  new String[]{String.valueOf(tableId)});
+            databaseAccessor.delete(tableName, " id = ?", new String[]{String.valueOf(id)});
             closeDatabase();
         }
         return success;
     }
 
-    private static void openDatabase(boolean write){
-        modelCache                                 =   HCDatabase.getModelCache();
+    private static void openDatabase(boolean write) {
+        modelCache = HCDatabase.getModelCache();
         try {
-            tableName                              =   ReflectionHelper.getFieldValue("tableName");
-        }catch (Exception e){
+            tableName = ReflectionHelper.getFieldValue("tableName");
+        } catch (Exception e) {
 
         }
-        tableId                                    =   modelCache.getTableId();
-        if(write){
-            databaseAccessor                       =   SQLiteDatabase.openDatabase(databasePath, null, SQLiteDatabase.OPEN_READWRITE);
-        }else{
-            databaseAccessor                       =   SQLiteDatabase.openDatabase(databasePath, null, SQLiteDatabase.OPEN_READONLY);
+        id = modelCache.getId();
+        if (write) {
+            databaseAccessor = SQLiteDatabase.openDatabase(databasePath, null, SQLiteDatabase.OPEN_READWRITE);
+        } else {
+            databaseAccessor = SQLiteDatabase.openDatabase(databasePath, null, SQLiteDatabase.OPEN_READONLY);
         }
     }
 
-    private static void closeDatabase(){
+    private static void closeDatabase() {
         databaseAccessor.close();
     }
 }

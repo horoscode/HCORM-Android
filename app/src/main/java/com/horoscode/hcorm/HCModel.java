@@ -8,15 +8,15 @@ import java.util.ArrayList;
  */
 public class HCModel{
 
-    protected int tableId                   =   -1;
-    protected String tablePrimaryKey        =   "id";
+    protected int id                          =   -1;
+//    protected String tablePrimaryKey        =   "id";
 
     public HCModel(){
-        HCDatabase.setCache(this);
+        HCDatabase.setModelCache(this);
         DatabaseHelper.checkDatabase();
     }
 
-    public int getTableId(){ return tableId; }
+    public int getId(){ return id; }
 
     public <T extends HCModel> ArrayList<T> all(){
         return DatabaseHelper.all();
@@ -27,7 +27,7 @@ public class HCModel{
     }
 
     public void save(){
-        HCDatabase.setCache(this);
+        HCDatabase.setModelCache(this);
         DatabaseHelper.save();
     }
 

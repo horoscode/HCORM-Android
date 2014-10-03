@@ -12,15 +12,7 @@ import java.io.OutputStream;
 /**
  * Created by Mac on 9/15/14.
  */
-public class FileHelper extends File{
-
-    public FileHelper(String path) {
-        super(path);
-    }
-
-    public static boolean isFileExist(File file){
-        return file.exists();
-    }
+public class FileHelper{
 
     public static void writeFile(InputStream inputFile, OutputStream outputFile){
         try{
@@ -36,6 +28,19 @@ public class FileHelper extends File{
         catch(Exception e){
             Log.d("Error:", e.toString());
         }
+    }
+
+    public static boolean isFileExist(String filePath){
+        File file                                   =   new File(filePath);
+        if(file.exists()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public static String getAssetsPath(){
+        return HCDatabase.getContext().getExternalFilesDir("assets").getAbsolutePath();
     }
 
     public static void writeFile(String fileName, String databasePath){
