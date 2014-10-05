@@ -1,9 +1,11 @@
 package com.horoscode.hcorm.helper;
 
 import android.content.res.AssetManager;
+import android.util.Log;
 
 import com.horoscode.hcorm.HCDatabase;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -12,27 +14,23 @@ import java.util.Arrays;
  * Created by Mac on 9/14/14.
  */
 public class AssetHelper {
-    public static InputStream fileToInputSteam(String fileName){
-        InputStream inputFile       =   null;
-        try {
-            inputFile               =   getAssets().open(fileName);
-        }catch (Exception e){
-
-        }
-        return inputFile;
-    }
-
-    private static AssetManager getAssets(){
+    public static AssetManager getAssets() {
         return HCDatabase.getContext().getAssets();
     }
 
-    public static boolean isAssetsFileExist(){
-        boolean isAssetsFileExist   =   false;
+    public static String getAssetsPath(){
+        return HCDatabase.getContext().getExternalFilesDir("assets").getAbsolutePath();
+    }
+
+    public static boolean isFileExistInAssets(String fileName){
         try {
-            isAssetsFileExist       =   Arrays.asList(getAssets().list("")).contains("myFile");
-        } catch (IOException e) {
-            e.printStackTrace();
+            if (Arrays.asList(getAssets().list("")).contains(fileName)) {
+                return true;
+            } else {
+                return false;
+            }
+        }catch (Exception e){
+            return false;
         }
-        return  isAssetsFileExist;
     }
 }

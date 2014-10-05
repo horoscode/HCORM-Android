@@ -20,6 +20,18 @@ public class ReflectionHelper {
         return getFieldValue(field.getName().toString());
     }
 
+    public static boolean isFieldExist(String fieldName){
+        try {
+            if(HCDatabase.getModelCache().getClass().getDeclaredField(fieldName) != null){
+                return true;
+            }else{
+                return false;
+            }
+        } catch (NoSuchFieldException e) {
+            return false;
+        }
+    }
+
     public static String getFieldValue(String fieldName){
         String value                            =   null;
         try {

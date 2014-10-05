@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pre-dex-items>
+
+    <item
+        dex="/Users/Mac/Documents/Private Project/HCMORM-IOS/HCORM-Android/HCORM-Android/app/build/intermediates/pre-dexed/debug/commons-codec-7a4e679717ac085cc7bd526c3140896769020c96.jar"
+        jar="/Users/Mac/Documents/Private Project/HCMORM-IOS/HCORM-Android/HCORM-Android/app/libs/commons-codec.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="fd32786786e2adb664d5ecc965da47629dca14ba"/>
+    <item
+        dex="/Users/Mac/Documents/Private Project/HCMORM-IOS/HCORM-Android/HCORM-Android/app/build/intermediates/pre-dexed/debug/sqlcipher-422798ad49a776e081a9f8c5ffb0ead909426920.jar"
+        jar="/Users/Mac/Documents/Private Project/HCMORM-IOS/HCORM-Android/HCORM-Android/app/libs/sqlcipher.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="244fe5e3beb1b217ac5da2a76f6aaaf50d44ff6e"/>
+    <item
+        dex="/Users/Mac/Documents/Private Project/HCMORM-IOS/HCORM-Android/HCORM-Android/app/build/intermediates/pre-dexed/debug/guava-r09-6124930994b16e003c96d485ff5c4b951c982c2b.jar"
+        jar="/Users/Mac/Documents/Private Project/HCMORM-IOS/HCORM-Android/HCORM-Android/app/libs/guava-r09.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="ef348209d301a97a96a0f57954d54f80244a1614"/>
+
+</pre-dex-items>

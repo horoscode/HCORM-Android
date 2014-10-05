@@ -2,45 +2,40 @@ package com.horoscode.hcorm;
 
 import android.app.Application;
 import android.content.Context;
-import android.util.Log;
 
 import com.horoscode.hcorm.helper.AssetHelper;
 import com.horoscode.hcorm.helper.CacheHelper;
-import com.horoscode.hcorm.helper.FileHelper;
 
 /**
  * Created by Mac on 9/6/14.
  */
-public class HCDatabase extends Application{
+public class HCDatabase extends Application {
 
-    private static String databaseName              = "";
+    private static String databaseName = "";
     private static int databaseVersion;
-    private static String databasePath              = "";
-    private static String databaseExtension         = "";
+    private static String databasePath = "";
+    private static String databaseExtension = "";
     private static Context context;
     private static CacheHelper cacheHelper;
+
+    public void onCreate() {
+        super.onCreate();
+        HCDatabase.this.context = getApplicationContext();
+        HCDatabase.this.cacheHelper = new CacheHelper();
+    }
 
     public static Context getContext() {
         return context;
     }
 
-    public void onCreate(){
-        super.onCreate();
-        HCDatabase.this.context                     = getApplicationContext();
-        HCDatabase.this.cacheHelper                 = new CacheHelper();
+    public static void setDatabaseInfo(String databaseName, String databaseExtension, int databaseVersion, String databasePath) {
+        HCDatabase.databaseName = databaseName;
+        HCDatabase.databaseExtension = databaseExtension;
+        HCDatabase.databaseVersion = databaseVersion;
+        HCDatabase.databasePath = databasePath;
     }
 
-    public static void setDatabaseInfo(String databaseName, String databaseExtension,int databaseVersion,String databasePath){
-        HCDatabase.databaseName                     = databaseName;
-        HCDatabase.databaseExtension                = databaseExtension;
-        HCDatabase.databaseVersion                  = databaseVersion;
-        HCDatabase.databasePath                     = databasePath;
-        if(!AssetHelper.isAssetsFileExist()){
-            Log.e("Warning:","Can't find "+getDatabaseNameFile()+" in your assets folder");
-        }
-    }
-
-    public static String getDatabaseNameFile(){
+    public static String getDatabaseFileName() {
         return getDatabaseName() + "." + getDatabaseExtension();
     }
 
@@ -53,10 +48,10 @@ public class HCDatabase extends Application{
     }
 
     public static String getDatabasePath() {
-        if(databasePath.equals("")){
-            databasePath                            = FileHelper.getAssetsPath()+"/"+ getDatabaseNameFile();
-        }else{
-            databasePath                            = FileHelper.getAssetsPath()+"/"+databasePath+"/"+ getDatabaseNameFile();
+        if (databasePath.equals("")) {
+            databasePath = AssetHelper.getAssetsPath() + "/" + getDatabaseFileName();
+        } else {
+            databasePath = AssetHelper.getAssetsPath() + "/" + databasePath + "/" + getDatabaseFileName();
         }
         return databasePath;
     }
@@ -67,11 +62,11 @@ public class HCDatabase extends Application{
 
     //Access Model Cache
 
-    public static void setModelCache(HCModel model){
+    public static void setModelCache(HCModel model) {
         cacheHelper.setModelcache(model);
     }
 
-    public static HCModel getModelCache(){
+    public static HCModel getModelCache() {
         return cacheHelper.getModelcache();
     }
 }

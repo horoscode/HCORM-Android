@@ -3,9 +3,11 @@ package com.horoscode.hcorm.helper;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.horoscode.hcorm.HCDatabase;
 import com.horoscode.hcorm.HCModel;
+import com.horoscode.hcorm.component.Table;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -15,7 +17,7 @@ import java.util.ArrayList;
  */
 public class DatabaseHelper {
 
-    private static String databaseName = HCDatabase.getDatabaseNameFile();
+    private static String databaseName = HCDatabase.getDatabaseFileName();
     private static String databasePath = HCDatabase.getDatabasePath();
     private static HCModel modelCache = HCDatabase.getModelCache();
     private static Field[] fields = modelCache.getClass().getFields();
@@ -31,7 +33,7 @@ public class DatabaseHelper {
 
     private static void writeDatabase() {
         try {
-            FileHelper.writeFile(databaseName, databasePath);
+            FileHelper.writeDatabaseFile(databaseName, databasePath);
         } catch (Exception e) {
         }
     }
@@ -114,11 +116,7 @@ public class DatabaseHelper {
 
     private static void openDatabase(boolean write) {
         modelCache = HCDatabase.getModelCache();
-        try {
-            tableName = ReflectionHelper.getFieldValue("tableName");
-        } catch (Exception e) {
-
-        }
+        tableName = Table.getTableName();
         id = modelCache.getId();
         if (write) {
             databaseAccessor = SQLiteDatabase.openDatabase(databasePath, null, SQLiteDatabase.OPEN_READWRITE);

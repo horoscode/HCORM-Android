@@ -14,7 +14,7 @@ public class HCORM {
     }
 
     public static void initWithDatabaseNameAndDatabaseVersion(String databaseName, int databaseVersion) {
-        initWithDatabaseNameAndDatabaseVersionAndDatabasePath(databaseName, databaseVersion, "data");
+        initWithDatabaseNameAndDatabaseVersionAndDatabasePath(databaseName, databaseVersion, "");
     }
 
     public static void initWithDatabaseNameAndDatabasePath(String databaseName, String databasePath) {
@@ -22,7 +22,7 @@ public class HCORM {
     }
 
     public static void initWithDatabaseNameAndDatabaseExtensionAndDatabaseVersion(String databaseName, String databaseExtension, int databaseVersion) {
-        initWithDatabaseNameAndDatabaseExtensionAndDatabaseVersionAndDatabasePath(databaseName, databaseExtension, databaseVersion, "data");
+        initWithDatabaseNameAndDatabaseExtensionAndDatabaseVersionAndDatabasePath(databaseName, databaseExtension, databaseVersion, "");
     }
 
     public static void initWithDatabaseNameAndDatabaseExtensionAndDatabasePath(String databaseName, String databaseExtension, String databasePath) {
