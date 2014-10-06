@@ -21,7 +21,7 @@ public class cmain extends Activity {
 //        mmain.username = "user1";
 //        mmain.password = "pass1";
 //        mmain.save();
-//
+////
 //        mmain.username = "maskal";
 //        mmain.password = "saintek";
 //        mmain.save();

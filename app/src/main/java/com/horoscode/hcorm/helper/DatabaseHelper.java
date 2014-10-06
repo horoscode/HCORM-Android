@@ -21,7 +21,7 @@ public class DatabaseHelper {
     private static String databasePath = HCDatabase.getDatabasePath();
     private static HCModel modelCache = HCDatabase.getModelCache();
     private static Field[] fields = modelCache.getClass().getFields();
-    private static String tableName;
+    private static String tableName, primaryKey;
     private static int id;
     private static SQLiteDatabase databaseAccessor;
 
@@ -42,8 +42,9 @@ public class DatabaseHelper {
         openDatabase(true);
         ContentValues values = new ContentValues();
         long success = -1;
+        Log.d("primary", primaryKey);
         for (int i = 0; i < fields.length; i++) {
-            if (!fields[i].getName().equals("id") && !fields[i].getName().equals("tableName")) {
+            if (!fields[i].getName().equals("primaryKey") && !fields[i].getName().equals(primaryKey) && !fields[i].getName().equals("tableName") && !fields[i].getName().equals("id")) {
                 values.put(ReflectionHelper.getFieldName(fields[i]), ReflectionHelper.getFieldValue(fields[i]));
             }
         }
@@ -51,7 +52,7 @@ public class DatabaseHelper {
         if (id == -1) {
             success = databaseAccessor.insert(tableName, null, values);
         } else {
-            success = databaseAccessor.update(tableName, values, "id = ?", new String[]{String.valueOf(id)});
+            success = databaseAccessor.update(tableName, values, primaryKey + " = ?", new String[]{String.valueOf(id)});
         }
         closeDatabase();
         return success;
@@ -91,12 +92,10 @@ public class DatabaseHelper {
         T models = (T) modelCache;
         if (cursor.moveToFirst()) {
             for (int i = 0; i < cursor.getColumnCount(); i++) {
-                if (!cursor.getColumnName(i).equals("id")) {
-                    try {
-                        Field kolom = models.getClass().getDeclaredField(cursor.getColumnName(i));
-                        ReflectionHelper.setFieldValue(kolom, cursor.getString(i));
-                    } catch (Exception e) {
-                    }
+                try {
+                    Field kolom = models.getClass().getDeclaredField(cursor.getColumnName(i));
+                    ReflectionHelper.setFieldValue(kolom, cursor.getString(i));
+                } catch (Exception e) {
                 }
             }
         }
@@ -105,11 +104,12 @@ public class DatabaseHelper {
 
     public static long destroy() {
         long success = -1;
-        int id = HCDatabase.getModelCache().getId();
         if (id != -1) {
             openDatabase(true);
-            databaseAccessor.delete(tableName, " id = ?", new String[]{String.valueOf(id)});
+            databaseAccessor.delete(tableName, primaryKey + " = ?", new String[]{String.valueOf(id)});
             closeDatabase();
+        }else{
+            Log.e("Warning", "Can't find data in " + tableName + " with " + primaryKey + " = " + String.valueOf(id));
         }
         return success;
     }
@@ -117,11 +117,25 @@ public class DatabaseHelper {
     private static void openDatabase(boolean write) {
         modelCache = HCDatabase.getModelCache();
         tableName = Table.getTableName();
-        id = modelCache.getId();
-        if (write) {
-            databaseAccessor = SQLiteDatabase.openDatabase(databasePath, null, SQLiteDatabase.OPEN_READWRITE);
-        } else {
-            databaseAccessor = SQLiteDatabase.openDatabase(databasePath, null, SQLiteDatabase.OPEN_READONLY);
+        primaryKey = Table.getPrimaryKey();
+        if(ReflectionHelper.isFieldExist(primaryKey)){
+            id = Integer.parseInt(ReflectionHelper.getFieldValue(primaryKey));
+        }else{
+            if(primaryKey.equals("id")){
+                id = modelCache.getId();
+            }else{
+                Log.e("Warning","Primary Key must defined with primary key override");
+            }
+        }
+
+        try {
+            if (write) {
+                databaseAccessor = SQLiteDatabase.openDatabase(databasePath, null, SQLiteDatabase.OPEN_READWRITE);
+            } else {
+                databaseAccessor = SQLiteDatabase.openDatabase(databasePath, null, SQLiteDatabase.OPEN_READONLY);
+            }
+        }catch(Exception e){
+            Log.e("Warning","Can't open " + databasePath);
         }
     }
 

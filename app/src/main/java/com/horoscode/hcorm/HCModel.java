@@ -9,22 +9,24 @@ import java.util.ArrayList;
  */
 public class HCModel {
 
-    protected int id = -1;
+    public int id = -1;
 
     public HCModel() {
         HCDatabase.setModelCache(this);
         DatabaseHelper.checkDatabase();
+        id = -1;
     }
 
-    public int getId() {
-        return id;
-    }
     public static <T extends HCModel> ArrayList<T> all() {
         return DatabaseHelper.all();
     }
 
     public <T extends HCModel> T first() {
         return DatabaseHelper.first();
+    }
+
+    public int getId() {
+        return id;
     }
 
     public void save() {

@@ -28,11 +28,20 @@ public class Table {
             String className = HCDatabase.getModelCache().getClass().getSimpleName();
             if(Character.isUpperCase(className.charAt(0))) {
                 tableName = standardTableName(className);
-                Log.d("tableName", tableName);
             }else{
                 Log.e("Warning", "You Must Follow Model Naming Convention or Override Model Naming Convention in " + className + " model");
             }
         }
         return tableName;
+    }
+
+    public static String getPrimaryKey(){
+        String primaryKey = "";
+        if(ReflectionHelper.isFieldExist("primaryKey")){
+            primaryKey = ReflectionHelper.getFieldValue("primaryKey");
+        }else{
+            primaryKey = "id";
+        }
+        return primaryKey;
     }
 }
