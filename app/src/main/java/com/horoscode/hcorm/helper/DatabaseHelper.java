@@ -107,6 +107,14 @@ public class DatabaseHelper {
         if (id != -1) {
             openDatabase(true);
             databaseAccessor.delete(tableName, primaryKey + " = ?", new String[]{String.valueOf(id)});
+            Field[] modelFields = modelCache.getClass().getFields();
+            for (int i=0; i<modelFields.length; i++){
+                if(modelFields[i].getType().getSimpleName().equals("String")){
+                    ReflectionHelper.setFieldValue(modelFields[i], null);
+                }else{
+                    ReflectionHelper.setFieldValue(modelFields[i], -1);
+                }
+            }
             closeDatabase();
         }else{
             Log.e("Warning", "Can't find data in " + tableName + " with " + primaryKey + " = " + String.valueOf(id));

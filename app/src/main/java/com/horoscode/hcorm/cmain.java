@@ -18,21 +18,23 @@ public class cmain extends Activity {
         HCORM.initWithDatabaseName("supersurvey");
         User mmain = new User();
 
-//        mmain.username = "user1";
-//        mmain.password = "pass1";
-//        mmain.save();
-////
-//        mmain.username = "maskal";
-//        mmain.password = "saintek";
-//        mmain.save();
-//
-        ArrayList<User> all = new User().all();
+//        for(int i=0; i<100; i++) {
+//            mmain.username = "maskal";
+//            mmain.password = "saintek";
+//            mmain.save();
+//        }
 
+        mmain.username ="aku";
+        mmain.user_id = 9;
+        mmain.destroy();
+//        ArrayList<User> all = new User().all();
+//
         StringBuilder builder = new StringBuilder();
-        for(int i=0; i<all.size(); i++){
-            builder.append("username = " + all.get(i).username + " password ="+ all.get(i).password);
-            builder.append("\n");
-        }
+//        for(int i=0; i<all.size(); i++){
+//            builder.append("username = " + all.get(i).username + " password ="+ all.get(i).password);
+//            builder.append("\n");
+//        }
+        builder.append(mmain.username);
 
 //        mmain first = new mmain().first();
 //        StringBuilder builder = new StringBuilder();
