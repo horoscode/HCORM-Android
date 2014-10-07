@@ -11,6 +11,7 @@ import com.horoscode.hcorm.component.Table;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Mac on 9/6/14.
@@ -44,7 +45,10 @@ public class DatabaseHelper {
         long success = -1;
         Log.d("primary", primaryKey);
         for (int i = 0; i < fields.length; i++) {
-            if (!fields[i].getName().equals("primaryKey") && !fields[i].getName().equals(primaryKey) && !fields[i].getName().equals("tableName") && !fields[i].getName().equals("id")) {
+            if (!fields[i].getName().equals("primaryKey") &&
+                    !fields[i].getName().equals(primaryKey) &&
+                    !fields[i].getName().equals("tableName") &&
+                    !fields[i].getName().equals("id")) {
                 values.put(ReflectionHelper.getFieldName(fields[i]), ReflectionHelper.getFieldValue(fields[i]));
             }
         }
@@ -58,9 +62,9 @@ public class DatabaseHelper {
         return success;
     }
 
-    public static <T extends HCModel> ArrayList<T> all() {
+    public static <T extends HCModel> List<T> all() {
         openDatabase(false);
-        ArrayList<T> models = new ArrayList<T>();
+        List<T> models = new ArrayList<T>();
         String query = "SELECT * FROM " + tableName;
         Cursor cursor = databaseAccessor.rawQuery(query, null);
         if (cursor.moveToFirst()) {
@@ -70,7 +74,12 @@ public class DatabaseHelper {
                     for (int i = 0; i < cursor.getColumnCount(); i++) {
                         try {
                             Field column = model.getClass().getDeclaredField(cursor.getColumnName(i));
-                            ReflectionHelper.setFieldValue(column, cursor.getString(i));
+                            if(column.getType().getSimpleName().equals("String")){
+                                ReflectionHelper.setFieldValue(column, cursor.getString(i));
+                            }else{
+                                ReflectionHelper.setFieldValue(column, Integer.parseInt(cursor.getString(i)));
+                            }
+
                         } catch (Exception e) {
                         }
                     }
@@ -104,16 +113,20 @@ public class DatabaseHelper {
 
     public static long destroy() {
         long success = -1;
+        openDatabase(true);
         if (id != -1) {
-            openDatabase(true);
-            databaseAccessor.delete(tableName, primaryKey + " = ?", new String[]{String.valueOf(id)});
-            Field[] modelFields = modelCache.getClass().getFields();
-            for (int i=0; i<modelFields.length; i++){
-                if(modelFields[i].getType().getSimpleName().equals("String")){
-                    ReflectionHelper.setFieldValue(modelFields[i], null);
-                }else{
-                    ReflectionHelper.setFieldValue(modelFields[i], -1);
+            success = databaseAccessor.delete(tableName, primaryKey + " = ?", new String[]{String.valueOf(id)});
+            if(success > 0){
+                Field[] modelFields = modelCache.getClass().getFields();
+                for (int i=0; i<modelFields.length; i++){
+                    if(modelFields[i].getType().getSimpleName().equals("String")){
+                        ReflectionHelper.setFieldValue(modelFields[i], null);
+                    }else{
+                        ReflectionHelper.setFieldValue(modelFields[i], -1);
+                    }
                 }
+            }else{
+                Log.e("Warning", "Can't find data in " + tableName + " with " + primaryKey + " = " + String.valueOf(id));
             }
             closeDatabase();
         }else{

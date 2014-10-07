@@ -3,6 +3,7 @@ package com.horoscode.hcorm;
 import com.horoscode.hcorm.helper.DatabaseHelper;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Mac on 9/2/14.
@@ -17,7 +18,7 @@ public class HCModel {
         id = -1;
     }
 
-    public static <T extends HCModel> ArrayList<T> all() {
+    public static <T extends HCModel> List<T> all() {
         return DatabaseHelper.all();
     }
 
