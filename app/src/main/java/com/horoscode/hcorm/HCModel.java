@@ -1,16 +1,19 @@
 package com.horoscode.hcorm;
 
+import android.util.Log;
+
 import com.horoscode.hcorm.helper.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by Mac on 9/2/14.
  */
 public class HCModel {
 
-    public int id = -1;
+    public int id;
 
     public HCModel() {
         HCDatabase.setModelCache(this);
@@ -18,7 +21,7 @@ public class HCModel {
         id = -1;
     }
 
-    public static <T extends HCModel> List<T> all() {
+    public <T extends HCModel> List<T> all() {
         return DatabaseHelper.all();
     }
 
@@ -26,16 +29,26 @@ public class HCModel {
         return DatabaseHelper.first();
     }
 
+    public <T extends HCModel> T last() {
+        return DatabaseHelper.last();
+    }
+
     public int getId() {
         return id;
     }
 
-    public void save() {
+    public long save() {
         HCDatabase.setModelCache(this);
-        DatabaseHelper.save();
+        return DatabaseHelper.save();
+    }
+
+    public <T extends HCModel> T create(String... content){
+        HCDatabase.setModelCache(this);
+        return DatabaseHelper.create(content);
     }
 
     public void destroy() {
+        HCDatabase.setModelCache(this);
         DatabaseHelper.destroy();
     }
 }
