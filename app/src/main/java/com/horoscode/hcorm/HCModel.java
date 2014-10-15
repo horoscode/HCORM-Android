@@ -1,12 +1,8 @@
 package com.horoscode.hcorm;
 
-import android.util.Log;
-
 import com.horoscode.hcorm.helper.DatabaseHelper;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Created by Mac on 9/2/14.
@@ -31,6 +27,18 @@ public class HCModel {
 
     public <T extends HCModel> T last() {
         return DatabaseHelper.last();
+    }
+
+    public <T extends HCModel> T find(int primaryKeyValue) {
+        return DatabaseHelper.find(primaryKeyValue);
+    }
+
+    public <T extends HCModel> T findBy(String condition) {
+        return DatabaseHelper.findBy(condition);
+    }
+
+    public <T extends HCModel> T take() {
+        return DatabaseHelper.take();
     }
 
     public int getId() {

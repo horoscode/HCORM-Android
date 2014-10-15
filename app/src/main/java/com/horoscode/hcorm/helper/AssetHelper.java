@@ -1,13 +1,9 @@
 package com.horoscode.hcorm.helper;
 
 import android.content.res.AssetManager;
-import android.util.Log;
 
 import com.horoscode.hcorm.HCDatabase;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Arrays;
 
 /**

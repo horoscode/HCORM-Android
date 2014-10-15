@@ -1,10 +1,6 @@
 package com.horoscode.hcorm.helper;
 
-import android.database.Cursor;
-
 import com.horoscode.hcorm.HCDatabase;
-import com.horoscode.hcorm.HCModel;
-import com.horoscode.hcorm.model.mmain;
 
 import java.lang.reflect.Field;
 

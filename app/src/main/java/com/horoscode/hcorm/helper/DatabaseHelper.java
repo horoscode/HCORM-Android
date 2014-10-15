@@ -8,6 +8,7 @@ import android.util.Log;
 import com.horoscode.hcorm.HCDatabase;
 import com.horoscode.hcorm.HCModel;
 import com.horoscode.hcorm.component.Table;
+import com.horoscode.hcorm.query.Select;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -115,32 +116,51 @@ public class DatabaseHelper {
                 }
             } while (cursor.moveToNext());
         }
+        closeDatabase();
         return models;
     }
 
+    /* Retrieving a Single Object */
+
     public static <T extends HCModel> T first() {
         openDatabase(false);
-        String query = "SELECT * FROM " + tableName + " ORDER BY " + primaryKey + " ASC LIMIT 1";
-        Cursor cursor = databaseAccessor.rawQuery(query, null);
-        if (cursor.moveToFirst()) {
-            for (int i = 0; i < cursor.getColumnCount(); i++) {
-                try {
-                    Field column = modelCache.getClass().getDeclaredField(cursor.getColumnName(i));
-                    if(column.getType().getSimpleName().equals("String")){
-                        ReflectionHelper.setFieldValue(column, cursor.getString(i));
-                    }else{
-                        ReflectionHelper.setFieldValue(column, Integer.parseInt(cursor.getString(i)));
-                    }
-                } catch (Exception e) {
-                }
-            }
-        }
+        String query = new Select("*").from(tableName).orderBy(primaryKey + " ASC").limit(1);
+        executeSingleQuery(query);
+        closeDatabase();
         return (T) modelCache;
     }
 
     public static <T extends HCModel> T last() {
         openDatabase(false);
-        String query = "SELECT * FROM " + tableName + " ORDER BY " + primaryKey + " DESC LIMIT 1";
+        String query = new Select("*").from(tableName).orderBy(primaryKey + " DESC").limit(1);
+        executeSingleQuery(query);
+        closeDatabase();
+        return (T) modelCache;
+    }
+
+    public static <T extends HCModel> T find(int primaryKeyValue) {
+        openDatabase(false);
+        String query = new Select("*").from(tableName).where(primaryKey +" = " +primaryKeyValue).limit(1);
+        executeSingleQuery(query);
+        return (T) modelCache;
+    }
+
+    public static <T extends HCModel> T take() {
+        openDatabase(false);
+        String query = new Select("*").from(tableName).limit(1);
+        executeSingleQuery(query);
+        return (T) modelCache;
+    }
+
+    public static <T extends HCModel> T findBy(String condition) {
+        openDatabase(false);
+        String query = new Select("*").from(tableName).where(condition).limit(1);
+        executeSingleQuery(query);
+        return (T) modelCache;
+    }
+
+    private static void executeSingleQuery(String query){
+        Log.d("query", query);
         Cursor cursor = databaseAccessor.rawQuery(query, null);
         if (cursor.moveToFirst()) {
             for (int i = 0; i < cursor.getColumnCount(); i++) {
@@ -154,9 +174,13 @@ public class DatabaseHelper {
                 } catch (Exception e) {
                 }
             }
+        }else{
+            Log.e("Warning", "No Matching Record is Found");
         }
-        return (T) modelCache;
     }
+
+    /* Retrieving a Single Object */
+
 
     public static long destroy() {
         long success = -1;
@@ -172,8 +196,6 @@ public class DatabaseHelper {
                         ReflectionHelper.setFieldValue(modelFields[i], -1);
                     }
                 }
-            }else{
-                Log.e("Warning", "Can't find data in " + tableName + " with " + primaryKey + " = " + String.valueOf(id));
             }
             closeDatabase();
         }else{
