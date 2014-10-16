@@ -9,12 +9,11 @@ import java.util.List;
  */
 public class HCModel {
 
-    public int id;
+    public Integer id;
 
     public HCModel() {
         HCDatabase.setModelCache(this);
         DatabaseHelper.checkDatabase();
-        id = -1;
     }
 
     public <T extends HCModel> List<T> all() {
@@ -39,10 +38,6 @@ public class HCModel {
 
     public <T extends HCModel> T take() {
         return DatabaseHelper.take();
-    }
-
-    public int getId() {
-        return id;
     }
 
     public long save() {

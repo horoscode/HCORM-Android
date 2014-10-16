@@ -24,7 +24,7 @@ public class DatabaseHelper {
     private static HCModel modelCache = HCDatabase.getModelCache();
     private static Field[] fields = modelCache.getClass().getFields();
     private static String tableName, primaryKey;
-    private static int id;
+    private static Integer id;
     private static SQLiteDatabase databaseAccessor;
 
     public static void checkDatabase() {
@@ -52,7 +52,7 @@ public class DatabaseHelper {
                 values.put(ReflectionHelper.getFieldName(fields[i]), ReflectionHelper.getFieldValue(fields[i]));
             }
         }
-        if (id == 0) {
+        if (id == null) {
             success = databaseAccessor.insert(tableName, null, values);
             if(success > 0){ last(); }
         } else {
@@ -165,12 +165,7 @@ public class DatabaseHelper {
         if (cursor.moveToFirst()) {
             for (int i = 0; i < cursor.getColumnCount(); i++) {
                 try {
-                    Field column = modelCache.getClass().getDeclaredField(cursor.getColumnName(i));
-                    if(column.getType().getSimpleName().equals("String")){
-                        ReflectionHelper.setFieldValue(column, cursor.getString(i));
-                    }else{
-                        ReflectionHelper.setFieldValue(column, Integer.parseInt(cursor.getString(i)));
-                    }
+                    ReflectionHelper.setFieldValue(cursor.getColumnName(i), cursor.getString(i));
                 } catch (Exception e) {
                 }
             }
@@ -181,11 +176,10 @@ public class DatabaseHelper {
 
     /* Retrieving a Single Object */
 
-
     public static long destroy() {
         long success = -1;
         openDatabase(true);
-        if (id != -1) {
+        if (id != null) {
             success = databaseAccessor.delete(tableName, primaryKey + " = ?", new String[]{String.valueOf(id)});
             if(success > 0){
                 Field[] modelFields = modelCache.getClass().getFields();
@@ -212,7 +206,7 @@ public class DatabaseHelper {
             id = Integer.parseInt(ReflectionHelper.getFieldValue(primaryKey));
         }else{
             if(primaryKey.equals("id")){
-                id = modelCache.getId();
+                id = modelCache.id;
             }else{
                 Log.e("Warning","Primary Key must defined with primary key override");
             }
